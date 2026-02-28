@@ -176,8 +176,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <p className="text-sm text-slate-300/80">
-                  Built for teaching, real clients, and content creation - all
-                  iun one ecosystem
+                Building tools that combine usability, performance, and practical functionality.
                 </p>
               </div>
             </a>
