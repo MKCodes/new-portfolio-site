@@ -623,10 +623,10 @@ export default function HomePage() {
 
               <div style={{ opacity: 0, animation: "fadeUp 0.6s ease forwards", animationDelay: "0.2s" }}>
                 <h1 style={{ fontSize: "clamp(2.4rem, 4.5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1, color: "#f1f5f9" }}>
-                  <AnimatedText text="I build things for the" delay={0.2} />
+                  <AnimatedText text="I build backends" delay={0.2} />
                   <br />
                   <span style={{ fontSize: "clamp(2.4rem, 4.5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.03em" }}>
-                    <AnimatedText text="web that matter." wordClassName="gradient-text" delay={0.5} />
+                    <AnimatedText text="that power the web." wordClassName="gradient-text" delay={0.5} />
                   </span>
                 </h1>
               </div>
@@ -757,7 +757,7 @@ export default function HomePage() {
 
         {/* About */}
         <section id="about" style={{ padding: "6rem 1.5rem", borderTop: "1px solid #0f1929" }}>
-          <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+          <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
             <p className="section-label" style={{ marginBottom: "0.75rem" }}>Background</p>
             <h2 style={{ fontSize: "2.5rem", fontWeight: 800, letterSpacing: "-0.03em", color: "#f1f5f9", marginBottom: "2.5rem" }}>About Me</h2>
 
