@@ -35,6 +35,70 @@ const PROJECTS = [
   },
 ];
 
+const EXPERIENCES = [
+  {
+    id: 1,
+    company: "Royal Bank of Canada",
+    sub: "Borealis AI",
+    role: "Software Engineer Intern",
+    period: "May 2025 – Aug 2025",
+    location: "Toronto, ON",
+    accent: "#0ea5e9",
+    logo: "RBC",
+    bullets: [
+      "Deployed observability platform on RBC AI Farm using Prometheus & AWS Grafana — 50% faster mean time to recovery.",
+      "Automated CI/CD pipeline via GitHub Actions for ML model lifecycle, accelerating deployments 40% across 5+ teams.",
+      "Built SSH access system for Run:AI containers with Docker & OpenShift, cutting setup time by 50% for 5+ teams.",
+      "Validated cross-region S3 replication via AWS CLI & Python, ensuring sub-second latency and 100% object consistency.",
+    ],
+  },
+  {
+    id: 2,
+    company: "Royal Bank of Canada",
+    sub: "Borealis AI",
+    role: "Software Engineer Intern",
+    period: "Sep 2024 – May 2025",
+    location: "Toronto, ON",
+    accent: "#7c3aed",
+    logo: "RBC",
+    bullets: [
+      "Built AI-powered migration system with OpenAI LLM & Python to automate WebFOCUS modernization, processing 10,000+ files and saving $5M+ in hiring costs.",
+      "Developed 20+ RESTful APIs with Spring Boot and Angular front-end features for NOVA, reducing API latency by 10% across 15+ teams.",
+      "Engineered RAG-powered support chatbot using Python, LangChain & FastAPI on OpenShift — 95% accuracy, serving 1,000+ employees.",
+    ],
+  },
+  {
+    id: 3,
+    company: "Ministry of Public Service and Delivery",
+    sub: "",
+    role: "Software Engineer Intern",
+    period: "Jan 2024 – Aug 2024",
+    location: "Toronto, ON",
+    accent: "#10b981",
+    logo: "GOV",
+    bullets: [
+      "Optimized server infrastructure with PowerShell, PHP & Ansible — eliminated 30+ manual hours/week.",
+      "Automated monitoring dashboards with PowerShell to visualize health metrics across 5+ servers, enabling 10% faster incident response.",
+      "Spearheaded migration and configuration of monitoring systems with zero downtime.",
+    ],
+  },
+  {
+    id: 4,
+    company: "Kev Group Inc",
+    sub: "",
+    role: "Software Engineer Intern",
+    period: "May 2022 – Aug 2022",
+    location: "Toronto, ON",
+    accent: "#f59e0b",
+    logo: "KEV",
+    bullets: [
+      "Built 50+ responsive pages in HTML, CSS & JavaScript in a cloud-based environment, improving user navigation.",
+      "Implemented caching with C# ASP.NET & Redis, reducing database query latency by 30%.",
+      "Enhanced internal tools with district filtering and CSV export, saving hours of manual work weekly.",
+    ],
+  },
+];
+
 function useMagnet(strength = 0.4) {
   const ref = useRef(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -142,7 +206,6 @@ function ProjectCard({ project, index }) {
         overflow: "hidden",
       }}
     >
-      {/* Big symbol background */}
       <div style={{
         position: "absolute", top: "-10px", right: "16px",
         fontSize: "7rem", color: project.accent, opacity: hovered ? 0.12 : 0.04,
@@ -176,6 +239,123 @@ function ProjectCard({ project, index }) {
             color: project.accent, background: `${project.accent}10`,
           }}>{s}</span>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function ExperienceCard({ exp, index }) {
+  const [open, setOpen] = useState(index === 0);
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={() => setOpen((o) => !o)}
+      style={{
+        opacity: 0,
+        animation: `cardIn 0.7s cubic-bezier(0.23,1,0.32,1) forwards`,
+        animationDelay: `${0.3 + index * 0.12}s`,
+        borderRadius: "1.25rem",
+        border: `1px solid ${open || hovered ? exp.accent + "50" : "#1a2540"}`,
+        background: open ? `linear-gradient(135deg, ${exp.accent}0d, #060b14)` : "#0a1020",
+        padding: "1.5rem 1.75rem",
+        cursor: "pointer",
+        transition: "border 0.3s, background 0.3s, box-shadow 0.3s",
+        boxShadow: open ? `0 12px 50px ${exp.accent}18` : "none",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Glow bar on left */}
+      <div style={{
+        position: "absolute", left: 0, top: "20%", bottom: "20%",
+        width: 3, borderRadius: "0 3px 3px 0",
+        background: exp.accent,
+        opacity: open ? 1 : 0,
+        transition: "opacity 0.3s",
+      }} />
+
+      {/* Header row */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          {/* Logo badge */}
+          <div style={{
+            width: 44, height: 44, borderRadius: "10px", flexShrink: 0,
+            background: `${exp.accent}18`,
+            border: `1px solid ${exp.accent}35`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontFamily: "'Space Mono', monospace", fontSize: "0.6rem",
+            fontWeight: 700, color: exp.accent, letterSpacing: "0.05em",
+          }}>
+            {exp.logo}
+          </div>
+
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+              <span style={{ fontSize: "1rem", fontWeight: 700, color: "#f1f5f9", letterSpacing: "-0.01em" }}>
+                {exp.company}
+              </span>
+              {exp.sub && (
+                <span style={{
+                  fontSize: "0.62rem", fontFamily: "'Space Mono', monospace",
+                  color: exp.accent, background: `${exp.accent}15`,
+                  border: `1px solid ${exp.accent}30`,
+                  padding: "0.15rem 0.55rem", borderRadius: "999px",
+                }}>
+                  {exp.sub}
+                </span>
+              )}
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginTop: "0.2rem", flexWrap: "wrap" }}>
+              <span style={{ fontSize: "0.78rem", color: "#94a3b8" }}>{exp.role}</span>
+              <span style={{ fontSize: "0.6rem", color: "#334155" }}>·</span>
+              <span style={{ fontSize: "0.65rem", fontFamily: "'Space Mono', monospace", color: "#475569" }}>{exp.location}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexShrink: 0 }}>
+          <span style={{
+            fontSize: "0.65rem", fontFamily: "'Space Mono', monospace",
+            color: "#475569", whiteSpace: "nowrap",
+          }}>
+            {exp.period}
+          </span>
+          <div style={{
+            width: 22, height: 22, borderRadius: "50%",
+            border: `1px solid ${exp.accent}40`,
+            background: `${exp.accent}10`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: exp.accent, fontSize: "0.7rem",
+            transition: "transform 0.3s cubic-bezier(0.23,1,0.32,1)",
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+          }}>
+            ↓
+          </div>
+        </div>
+      </div>
+
+      {/* Expandable bullets */}
+      <div style={{
+        overflow: "hidden",
+        maxHeight: open ? "400px" : "0px",
+        transition: "max-height 0.4s cubic-bezier(0.23,1,0.32,1)",
+      }}>
+        <div style={{ marginTop: "1.25rem", paddingLeft: "3.5rem", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+          {exp.bullets.map((b, i) => (
+            <div key={i} style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
+              <span style={{
+                flexShrink: 0, marginTop: "0.35rem",
+                width: 5, height: 5, borderRadius: "50%",
+                background: exp.accent, opacity: 0.7,
+                display: "inline-block",
+              }} />
+              <span style={{ fontSize: "0.82rem", color: "#94a3b8", lineHeight: 1.7 }}>{b}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -245,6 +425,7 @@ export default function HomePage() {
           to { opacity: 1; transform: translateY(0) rotate(0deg); }
         }
         @keyframes cardIn {
+          from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeUp {
@@ -382,7 +563,6 @@ export default function HomePage() {
         }
       `}</style>
 
-      {/* Custom cursor */}
       <CustomCursor />
       <div className="noise" />
 
@@ -411,7 +591,7 @@ export default function HomePage() {
               <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#f1f5f9", letterSpacing: "-0.01em" }}>Mohammad Khan</span>
             </button>
             <nav style={{ display: "flex", gap: "2rem" }}>
-              {[["projects", "Projects"], ["about", "About"], ["contact", "Contact"]].map(([id, label]) => (
+              {[["experience", "Experience"], ["projects", "Projects"], ["about", "About"], ["contact", "Contact"]].map(([id, label]) => (
                 <button key={id} onClick={() => scrollToSection(id)} className="nav-link">{label}</button>
               ))}
             </nav>
@@ -420,14 +600,12 @@ export default function HomePage() {
 
         {/* Hero */}
         <section style={{ position: "relative", overflow: "hidden", padding: "6rem 1.5rem 8rem" }}>
-          {/* Orbs */}
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: "10%", left: "20%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, #7c3aed25, transparent 70%)", animation: "orb1 8s ease-in-out infinite" }} />
             <div style={{ position: "absolute", bottom: "10%", right: "15%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, #0ea5e920, transparent 70%)", animation: "orb2 10s ease-in-out infinite" }} />
             <div style={{ position: "absolute", top: "50%", right: "30%", width: 200, height: 200, borderRadius: "50%", background: "radial-gradient(circle, #10b98115, transparent 70%)", animation: "orb1 6s ease-in-out infinite reverse" }} />
           </div>
 
-          {/* Grid lines */}
           <div style={{
             position: "absolute", inset: 0, pointerEvents: "none",
             backgroundImage: "linear-gradient(#0ea5e908 1px, transparent 1px), linear-gradient(90deg, #0ea5e908 1px, transparent 1px)",
@@ -473,9 +651,87 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero card */}
             <div style={{ opacity: 0, animation: "fadeUp 0.8s ease forwards", animationDelay: "0.4s" }}>
               <FeaturedCard />
+            </div>
+          </div>
+        </section>
+
+        {/* ── EXPERIENCE ── */}
+        <section id="experience" style={{ padding: "6rem 1.5rem", borderTop: "1px solid #0f1929", position: "relative", overflow: "hidden" }}>
+          {/* Subtle background glow */}
+          <div style={{ position: "absolute", top: "30%", right: "-10%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, #0ea5e910, transparent 70%)", pointerEvents: "none" }} />
+
+          <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative" }}>
+            {/* Section header */}
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "3rem" }}>
+              <div>
+                <p className="section-label" style={{ marginBottom: "0.75rem" }}>Work History</p>
+                <h2 style={{ fontSize: "2.5rem", fontWeight: 800, letterSpacing: "-0.03em", color: "#f1f5f9" }}>Experience</h2>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#10b981", display: "inline-block", animation: "blink 2s infinite" }} />
+                <span style={{ fontSize: "0.7rem", fontFamily: "'Space Mono', monospace", color: "#475569" }}>
+                  3+ yrs · 4 roles
+                </span>
+              </div>
+            </div>
+
+            {/* Timeline layout */}
+            <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: "0 3rem" }}>
+              
+              {/* Left: timeline spine */}
+              <div style={{ position: "relative" }}>
+                <div style={{
+                  position: "sticky", top: "80px",
+                  display: "flex", flexDirection: "column", gap: "1rem",
+                }}>
+                  <div style={{
+                    borderRadius: "1rem", border: "1px solid #1a2540",
+                    background: "#0a1020", padding: "1.25rem",
+                  }}>
+                    <p style={{ fontSize: "0.6rem", fontFamily: "'Space Mono', monospace", color: "#334155", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "0.75rem" }}>
+                      Timeline
+                    </p>
+                    {EXPERIENCES.map((exp, i) => (
+                      <div key={exp.id} style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: i < EXPERIENCES.length - 1 ? "0.9rem" : 0 }}>
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: exp.accent, flexShrink: 0 }} />
+                        <div>
+                          <div style={{ fontSize: "0.65rem", color: "#94a3b8", fontWeight: 600 }}>{exp.company.split(" ").slice(0, 2).join(" ")}</div>
+                          <div style={{ fontSize: "0.58rem", fontFamily: "'Space Mono', monospace", color: "#334155", marginTop: "0.1rem" }}>
+                            {exp.period.split("–")[0].trim()}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Stats */}
+                  <div style={{
+                    borderRadius: "1rem", border: "1px solid #1a2540",
+                    background: "#0a1020", padding: "1.25rem",
+                    display: "flex", flexDirection: "column", gap: "0.75rem",
+                  }}>
+                    {[
+                      { val: "$5M+", label: "Cost Savings" },
+                      { val: "10K+", label: "Files Processed" },
+                      { val: "1K+", label: "Users Served" },
+                    ].map((s) => (
+                      <div key={s.label}>
+                        <div style={{ fontSize: "1.1rem", fontWeight: 800, color: "#f1f5f9", letterSpacing: "-0.02em" }}>{s.val}</div>
+                        <div style={{ fontSize: "0.58rem", fontFamily: "'Space Mono', monospace", color: "#334155", textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: cards */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {EXPERIENCES.map((exp, i) => (
+                  <ExperienceCard key={exp.id} exp={exp} index={i} />
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -668,10 +924,8 @@ function FeaturedCard() {
       position: "relative",
       overflow: "hidden",
     }}>
-      {/* Glow */}
       <div style={{ position: "absolute", top: -40, right: -40, width: 200, height: 200, borderRadius: "50%", background: "radial-gradient(circle, #7c3aed20, transparent 70%)", pointerEvents: "none" }} />
 
-      {/* Terminal header */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem" }}>
         {["#f43f5e", "#fbbf24", "#10b981"].map((c) => (
           <div key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />
@@ -679,7 +933,6 @@ function FeaturedCard() {
         <span style={{ marginLeft: "0.5rem", fontSize: "0.65rem", fontFamily: "'Space Mono', monospace", color: "#334155" }}>mohammad.dev</span>
       </div>
 
-      {/* Code lines */}
       <div style={{ fontFamily: "'Space Mono', monospace", fontSize: "0.78rem", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
         {lines.map((l, i) => (
           <div key={i} style={{ display: "flex", gap: "0.5rem" }}>
@@ -692,7 +945,6 @@ function FeaturedCard() {
         </div>
       </div>
 
-      {/* Stats row */}
       <div style={{ marginTop: "1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.75rem" }}>
         {[
           { label: "Projects", val: "10+" },
