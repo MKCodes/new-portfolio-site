@@ -2,6 +2,18 @@
 
 import { useState, useEffect, useRef } from "react";
 
+// ✏️ UPDATE THIS WHENEVER YOU START SOMETHING NEW
+// Set title to null to show the idle/resting state
+const CURRENT_BUILD = {
+  title: null,
+  status: null,
+  started: null,
+  desc: null,
+  stack: [],
+  progress: 0,
+  log: [],
+};
+
 const PROJECTS = [
   {
     id: 1,
@@ -237,6 +249,150 @@ function ProjectCard({ project, index }) {
             padding: "0.25rem 0.6rem", borderRadius: "999px",
             border: `1px solid ${project.accent}40`,
             color: project.accent, background: `${project.accent}10`,
+          }}>{s}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CurrentlyBuilding({ data }) {
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick(t => t + 1), 1200);
+    return () => clearInterval(id);
+  }, []);
+
+  if (!data.title) {
+    return (
+      <div style={{
+        borderRadius: "1.5rem",
+        border: "1px dashed #1a2540",
+        background: "#0a1020",
+        padding: "1.5rem 1.75rem",
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+          <div style={{
+            width: 44, height: 44, borderRadius: "10px", flexShrink: 0,
+            border: "1px dashed #1e293b",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "1.2rem",
+          }}>💤</div>
+          <div>
+            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "#334155", letterSpacing: "-0.01em" }}>
+              Nothing in the oven right now.
+            </div>
+            <div style={{ fontSize: "0.72rem", fontFamily: "'Space Mono', monospace", color: "#1e293b", marginTop: "0.2rem" }}>
+              Check back soon — something's usually brewing.
+            </div>
+          </div>
+        </div>
+        <span style={{
+          flexShrink: 0, fontSize: "0.6rem", fontFamily: "'Space Mono', monospace",
+          padding: "0.25rem 0.7rem", borderRadius: "999px",
+          border: "1px solid #1a2540", color: "#1e293b", letterSpacing: "0.1em",
+        }}>IDLE</span>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      borderRadius: "1.5rem",
+      border: "1px solid #7c3aed40",
+      background: "linear-gradient(135deg, #7c3aed08, #060b14)",
+      padding: "1.75rem",
+      position: "relative",
+      overflow: "hidden",
+      boxShadow: "0 0 40px #7c3aed12",
+    }}>
+      <div style={{
+        position: "absolute", top: -60, right: -60,
+        width: 180, height: 180, borderRadius: "50%",
+        background: "radial-gradient(circle, #7c3aed25, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.4rem" }}>
+            <span style={{
+              fontSize: "0.6rem", fontFamily: "'Space Mono', monospace",
+              padding: "0.2rem 0.6rem", borderRadius: "999px",
+              border: "1px solid #7c3aed60", color: "#a78bfa", background: "#7c3aed12",
+              letterSpacing: "0.1em",
+            }}>NOW BUILDING</span>
+            <span style={{
+              width: 7, height: 7, borderRadius: "50%",
+              background: "#a78bfa", display: "inline-block",
+              boxShadow: "0 0 6px #7c3aed",
+              animation: "blink 1.2s infinite",
+            }} />
+          </div>
+          <h3 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#f1f5f9", letterSpacing: "-0.02em" }}>
+            {data.title}
+          </h3>
+          <span style={{ fontSize: "0.62rem", fontFamily: "'Space Mono', monospace", color: "#334155" }}>
+            Since {data.started}
+          </span>
+        </div>
+
+        <div style={{ position: "relative", width: 52, height: 52, flexShrink: 0 }}>
+          <svg width="52" height="52" style={{ transform: "rotate(-90deg)" }}>
+            <circle cx="26" cy="26" r="22" fill="none" stroke="#1a2540" strokeWidth="3" />
+            <circle
+              cx="26" cy="26" r="22" fill="none"
+              stroke="#7c3aed" strokeWidth="3"
+              strokeDasharray={`${2 * Math.PI * 22}`}
+              strokeDashoffset={`${2 * Math.PI * 22 * (1 - data.progress / 100)}`}
+              strokeLinecap="round"
+              style={{ filter: "drop-shadow(0 0 4px #7c3aed)" }}
+            />
+          </svg>
+          <span style={{
+            position: "absolute", inset: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "0.65rem", fontFamily: "'Space Mono', monospace", color: "#a78bfa", fontWeight: 700,
+          }}>{data.progress}%</span>
+        </div>
+      </div>
+
+      <p style={{ fontSize: "0.82rem", color: "#64748b", lineHeight: 1.7, marginBottom: "1.25rem" }}>
+        {data.desc}
+      </p>
+
+      <div style={{
+        borderRadius: "0.75rem", background: "#060b14",
+        border: "1px solid #1a2540", padding: "1rem", marginBottom: "1.25rem",
+        fontFamily: "'Space Mono', monospace",
+      }}>
+        <div style={{ fontSize: "0.58rem", color: "#334155", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "0.6rem" }}>
+          dev log
+        </div>
+        {data.log.map((line, i) => {
+          const isDone = line.startsWith("✓");
+          const isActive = line.startsWith("→");
+          return (
+            <div key={i} style={{
+              fontSize: "0.7rem",
+              color: isDone ? "#475569" : isActive ? "#a78bfa" : "#1e293b",
+              marginBottom: "0.3rem",
+              display: "flex", alignItems: "center", gap: "0.4rem",
+            }}>
+              {isActive && <span style={{ opacity: tick % 2 === 0 ? 1 : 0.3, transition: "opacity 0.3s" }}>▶</span>}
+              {line}
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+        {data.stack.map(s => (
+          <span key={s} style={{
+            fontSize: "0.65rem", fontFamily: "'Space Mono', monospace",
+            padding: "0.25rem 0.6rem", borderRadius: "999px",
+            border: "1px solid #7c3aed30", color: "#a78bfa", background: "#7c3aed0d",
           }}>{s}</span>
         ))}
       </div>
@@ -623,16 +779,16 @@ export default function HomePage() {
 
               <div style={{ opacity: 0, animation: "fadeUp 0.6s ease forwards", animationDelay: "0.2s" }}>
                 <h1 style={{ fontSize: "clamp(2.4rem, 4.5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1, color: "#f1f5f9" }}>
-                  <AnimatedText text="I build backends" delay={0.2} />
+                  <AnimatedText text="I build backends that" delay={0.2} />
                   <br />
                   <span style={{ fontSize: "clamp(2.4rem, 4.5vw, 3.5rem)", fontWeight: 800, letterSpacing: "-0.03em" }}>
-                    <AnimatedText text="that power the web." wordClassName="gradient-text" delay={0.5} />
+                    <AnimatedText text="power the web." wordClassName="gradient-text" delay={0.5} />
                   </span>
                 </h1>
               </div>
 
               <p style={{ fontSize: "0.95rem", color: "#64748b", lineHeight: 1.75, maxWidth: "480px", opacity: 0, animation: "fadeUp 0.6s ease forwards", animationDelay: "0.7s" }}>
-                Computer Science grad building scalable full-stack systems with React, Next.js, Spring Boot, and Python. I care about clean architecture, real-world impact, and interfaces people actually love.
+                CS grad with 3 internships at RBC and the Ontario government. I build the APIs, pipelines, and AI systems that run behind the scenes — with Spring Boot, Python, Next.js, and a thing for clean architecture.
               </p>
 
               <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", opacity: 0, animation: "fadeUp 0.6s ease forwards", animationDelay: "0.85s" }}>
@@ -747,6 +903,50 @@ export default function HomePage() {
               <p style={{ fontSize: "0.78rem", fontFamily: "'Space Mono', monospace", color: "#475569" }}>
                 {new Date().getFullYear()} · 3 projects
               </p>
+            </div>
+
+            {/* Currently building card */}
+            <div style={{ marginBottom: "1.75rem" }}>
+              <CurrentlyBuilding data={CURRENT_BUILD} />
+            </div>
+
+            {/* Live demos banner */}
+            <div style={{
+              marginBottom: "1.75rem",
+              borderRadius: "1rem",
+              border: "1px dashed #1e293b",
+              background: "linear-gradient(90deg, #0a1020, #060b14)",
+              padding: "0.85rem 1.25rem",
+              display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem",
+              overflow: "hidden", position: "relative",
+            }}>
+              {/* Scrolling ticker text */}
+              <div style={{ overflow: "hidden", flex: 1 }}>
+                <div style={{
+                  display: "flex", gap: "3rem", whiteSpace: "nowrap",
+                  animation: "ticker 18s linear infinite",
+                }}>
+                  {Array(4).fill(null).map((_, i) => (
+                    <span key={i} style={{ fontSize: "0.68rem", fontFamily: "'Space Mono', monospace", color: "#334155", letterSpacing: "0.1em" }}>
+                      ⚙ LIVE DEMOS IN PROGRESS &nbsp;·&nbsp; DEPLOYMENTS SHIPPING SOON &nbsp;·&nbsp; CODE READY, SERVERS PENDING
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <span style={{
+                flexShrink: 0, fontSize: "0.62rem", fontFamily: "'Space Mono', monospace",
+                padding: "0.25rem 0.7rem", borderRadius: "999px",
+                border: "1px solid #f59e0b40", color: "#f59e0b", background: "#f59e0b10",
+                letterSpacing: "0.08em",
+              }}>
+                🚧 WIP
+              </span>
+              <style>{`
+                @keyframes ticker {
+                  from { transform: translateX(0); }
+                  to { transform: translateX(-50%); }
+                }
+              `}</style>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
